@@ -8,6 +8,8 @@ Uso:
     -> abrir http://127.0.0.1:5000
 """
 
+import os
+
 from flask import Flask, jsonify, render_template, request
 
 from genetic import attacking_pairs, board_matrix, genetic_algorithm
@@ -76,4 +78,8 @@ def resolver():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    # En local: python app.py  ->  http://127.0.0.1:5000
+    # En produccion (Render, Railway, etc.) arranca gunicorn y usa la variable PORT.
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "1") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug)

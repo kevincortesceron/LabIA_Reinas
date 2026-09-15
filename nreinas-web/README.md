@@ -15,6 +15,40 @@ python app.py
 
 Luego abre **http://127.0.0.1:5000** en el navegador.
 
+## Despliegue
+
+> **Netlify no sirve para este proyecto.** Netlify solo ejecuta funciones en
+> JavaScript/TypeScript y Go; no tiene runtime de Python, así que un backend Flask
+> no puede correr ahí. Solo serviría si el algoritmo se reescribe en JavaScript.
+
+### Render (recomendado — gratis, sin tarjeta)
+
+1. Sube esta carpeta a un repositorio de GitHub.
+2. En [render.com](https://render.com) → **New → Web Service** → conecta el repo.
+3. Render detecta `render.yaml` y ya queda configurado. Si lo haces a mano:
+   - Build command: `pip install -r requirements.txt`
+   - Start command: `gunicorn app:app --timeout 120`
+
+El plan gratuito da 750 horas al mes, pero el servicio **se duerme tras 15 minutos
+sin visitas** y la primera carga tarda ~30–50 s en despertar.
+
+### PythonAnywhere (gratis, siempre encendido)
+
+Una app web gratis, sin Docker, ideal para mostrar el proyecto en clase porque no
+se duerme. El límite es de **100 segundos de CPU al día**, suficiente para este
+algoritmo salvo que hagas muchas corridas pesadas (N grande + muchas generaciones).
+
+### Otras opciones
+
+| Plataforma | Nota |
+|---|---|
+| Vercel | Corre Flask con su runtime de Python, pero pide tarjeta para el plan gratis y las funciones tienen límite de tiempo de ejecución. |
+| Railway | Ya no tiene plan gratis permanente (créditos de prueba y luego suscripción mínima). |
+| Google Cloud Run | Capa gratuita generosa, pero exige tarjeta y configurar un contenedor. |
+
+`Procfile` y `render.yaml` ya están incluidos, así que el proyecto también funciona
+tal cual en cualquier plataforma tipo Heroku.
+
 ## Estructura
 
 | Archivo | Qué hace |
@@ -24,6 +58,23 @@ Luego abre **http://127.0.0.1:5000** en el navegador.
 | `templates/index.html` | La página. |
 | `static/style.css` | Estilos (tema claro y oscuro automáticos). |
 | `static/app.js` | Dibuja el tablero, la animación y la gráfica de convergencia. |
+| `experimentos/` | Los scripts que generan el análisis experimental de la Parte 3 del informe. |
+
+## Reproducir los resultados del informe
+
+Todos los números, tablas y figuras de la Parte 3 salen de `experimentos/`:
+
+```bash
+cd experimentos
+pip install numpy matplotlib
+python verificar.py   # comprueba que el motor experimental equivale a genetic.py
+python correr.py      # ~4-5 min. Reproduce resultados.json
+python graficas.py    # Figuras 1 a 4
+```
+
+Cada ejecución usa una semilla fija, así que los resultados son reproducibles
+bit a bit. `experimentos/README.md` explica el diseño experimental y la relación
+entre `motor.py` y `genetic.py`.
 
 ## Qué hace la página
 
