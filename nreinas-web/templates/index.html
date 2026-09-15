@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>N-Reinas · Algoritmo Genético</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>Problema de las N&#8209;Reinas</h1>
+    <p class="sub">Resuelto con un algoritmo genético — selección, cruce de un punto y mutación por intercambio.</p>
+  </header>
+
+  <main class="layout">
+
+    <!-- ---------- Panel de parámetros ---------- -->
+    <section class="panel" aria-labelledby="h-params">
+      <h2 id="h-params">Parámetros</h2>
+
+      <form id="form" class="form">
+        <label class="field">
+          <span>Número de reinas (N)</span>
+          <input type="number" id="n" name="n" value="8" min="4" max="20" required>
+        </label>
+
+        <label class="field">
+          <span>Tamaño de población</span>
+          <input type="number" id="population_size" value="100" min="10" max="500" required>
+        </label>
+
+        <label class="field">
+          <span>Generaciones máximas</span>
+          <input type="number" id="generations" value="500" min="10" max="2000" required>
+        </label>
+
+        <label class="field">
+          <span>Tasa de mutación <output id="mr-out">0.20</output></span>
+          <input type="range" id="mutation_rate" value="0.2" min="0" max="1" step="0.05">
+        </label>
+
+        <label class="field">
+          <span>Semilla <small>(opcional, para repetir la corrida)</small></span>
+          <input type="number" id="seed" placeholder="aleatoria">
+        </label>
+
+        <button type="submit" id="run" class="btn">Ejecutar algoritmo</button>
+      </form>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <dl class="stats" id="stats" hidden>
+        <div><dt>Generación</dt><dd id="s-gen">—</dd></div>
+        <div><dt>Ataques</dt><dd id="s-att">—</dd></div>
+        <div><dt>Fitness</dt><dd id="s-fit">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- ---------- Tablero ---------- -->
+    <section class="panel" aria-labelledby="h-board">
+      <h2 id="h-board">Tablero</h2>
+
+      <div id="board" class="board" role="img" aria-label="Tablero de ajedrez con las reinas"></div>
+
+      <div class="player" id="player" hidden>
+        <button type="button" class="btn btn-ghost" id="play" aria-label="Reproducir la evolución">▶︎ Animar</button>
+        <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Generación mostrada">
+        <span class="gen-label" id="gen-label">gen 1</span>
+      </div>
+
+      <p class="vector" id="vector"></p>
+    </section>
+
+    <!-- ---------- Convergencia ---------- -->
+    <section class="panel panel-wide viz-root" aria-labelledby="h-chart">
+      <h2 id="h-chart">Convergencia del mejor fitness</h2>
+      <p class="caption">Fitness = &minus;(número de ataques). El objetivo es llegar a <strong>0</strong>.</p>
+
+      <figure class="chart-figure">
+        <div id="chart" class="chart"></div>
+        <figcaption class="chart-note" id="chart-note">Ejecuta el algoritmo para ver la curva.</figcaption>
+      </figure>
+
+      <details class="table-view">
+        <summary>Ver datos en tabla</summary>
+        <div class="table-wrap">
+          <table id="data-table">
+            <thead><tr><th>Generación</th><th>Mejor fitness</th><th>Ataques</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
